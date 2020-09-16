@@ -1,12 +1,9 @@
 #!/bin/bash
 set -e
 
-if [ "${WELCOME_BANNER}" ]; then
-    echo ${WELCOME_BANNER}
-fi
-
 arg1=$1
 arg2=$2
+arg3=$3
 
 mkdir -p /nonexistent
 mount -t tmpfs -o size=${SESSION_STORAGE_SIZE} tmpfs /nonexistent
@@ -17,7 +14,7 @@ echo 'PS1="> "' >> .bashrc
 mkdir -p .kube
 
 export HOME=/nonexistent
-if [ -z "${arg2}" ]; then
+if [ -z "${arg3}" ]; then
     echo $arg1| base64 -d > .kube/config
 else
     echo `kubectl config set-credentials webkubectl-user --token=${arg2}` > /dev/null 2>&1
@@ -46,4 +43,10 @@ chown -R nobody:nogroup .kube
 
 export TMPDIR=/nonexistent
 
-exec su -s /bin/bash nobody
+# exec su -s /bin/bash nobody
+# Switch to nobody user and connect to the given pod
+if [ "${arg2}" ]; then
+    exec su -s "/bin/bash" -c "kubectl exec -it deployment/${arg2} -- bash" nobody
+else
+   echo "Permission Denied!"
+fi
