@@ -4,7 +4,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/KubeOperator/webkubectl/gotty/server"
+	"github.com/rahuldshetty/webkubectl/gotty/server"
 )
 
 type Options struct {

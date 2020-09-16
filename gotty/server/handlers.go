@@ -12,11 +12,11 @@ import (
 	"strings"
 	"sync/atomic"
 
-	cache "github.com/KubeOperator/webkubectl/gotty/cache/token"
-	"github.com/KubeOperator/webkubectl/gotty/pkg/randomstring"
-	"github.com/KubeOperator/webkubectl/gotty/webtty"
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
+	cache "github.com/rahuldshetty/webkubectl/gotty/cache/token"
+	"github.com/rahuldshetty/webkubectl/gotty/pkg/randomstring"
+	"github.com/rahuldshetty/webkubectl/gotty/webtty"
 )
 
 func (server *Server) generateHandleWS(ctx context.Context, cancel context.CancelFunc, counter *counter) http.HandlerFunc {
@@ -123,6 +123,7 @@ func (server *Server) processWSConn(ctx context.Context, conn *websocket.Conn) e
 	}
 	windowTitle := ""
 	params := query.Query()
+	podName := params.Get("podName")
 	params.Del("arg")
 	arg := ""
 	if len(params.Get("token")) > 0 {
@@ -139,7 +140,9 @@ func (server *Server) processWSConn(ctx context.Context, conn *websocket.Conn) e
 		arg = "ERROR:No Token Provided"
 	}
 	params.Add("arg", arg)
-	//log.Println("arg: " + arg)
+	params.Add("arg", podName)
+	log.Println("arg: " + arg)
+	log.Println("podName:" + podName)
 	var slave Slave
 	slave, err = server.factory.New(params)
 	if err != nil {

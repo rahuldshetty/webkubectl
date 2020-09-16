@@ -1,14 +1,14 @@
-[英文 README.md](https://github.com/KubeOperator/webkubectl/blob/master/README.md)
+[英文 README.md](https://github.com/rahuldshetty/webkubectl/blob/master/README.md)
 
-# ![](https://raw.githubusercontent.com/KubeOperator/webkubectl/master/gotty/resources/favicon.png) Web Kubectl - 在Web浏览器中运行kubectl命令
+# ![](https://raw.githubusercontent.com/rahuldshetty/webkubectl/master/gotty/resources/favicon.png) Web Kubectl - 在Web浏览器中运行kubectl命令
 
 ![License](https://img.shields.io/badge/License-Apache%202.0-red)
 ![Dockerized](https://img.shields.io/badge/Dockerized-yes-brightgreen)
 ![Version](https://img.shields.io/badge/Version-v2.6.0-yellow)
-[![Docker Pulls](https://img.shields.io/docker/pulls/kubeoperator/webkubectl.svg)](https://hub.docker.com/r/kubeoperator/webkubectl)
+[![Docker Pulls](https://img.shields.io/docker/pulls/rahuldshetty/webkubectl.svg)](https://hub.docker.com/r/rahuldshetty/webkubectl)
 ![HitCount](http://hits.dwyl.io/webkubectl/webkubectl.svg)
 
-![webkubectl](https://raw.githubusercontent.com/KubeOperator/webkubectl/master/web-resources/webkubectl.gif)
+![webkubectl](https://raw.githubusercontent.com/rahuldshetty/webkubectl/master/web-resources/webkubectl.gif)
 
 # 目标
 
@@ -36,7 +36,7 @@ _______________________________________________________________________
 ```
 
 # 架构
-Web Kubectl 使用[webkubectl/gotty](https://github.com/KubeOperator/webkubectl/tree/master/gotty)在Web浏览器中运行基于JavaScript的Shell终端。<br>
+Web Kubectl 使用[webkubectl/gotty](https://github.com/rahuldshetty/webkubectl/tree/master/gotty)在Web浏览器中运行基于JavaScript的Shell终端。<br>
 当打开一个新会话时，将为该会话创建一个临时Linux命名空间，以确保所有会话都是隔离的，每个会话都有自己的命名空间和存储，同时为当前会话生成.kube/config文件。 <br>
 会话结束后，临时命名空间和存储将被删除。
 
@@ -44,7 +44,7 @@ Web Kubectl 使用[webkubectl/gotty](https://github.com/KubeOperator/webkubectl/
 # 安装
 
 ```sh
-$ docker run --name="webkubectl" -p 8080:8080 -d --privileged kubeoperator/webkubectl
+$ docker run --name="webkubectl" -p 8080:8080 -d --privileged rahuldshetty/webkubectl
 ```
 
 高级环境变量
@@ -53,7 +53,7 @@ $ docker run --name="webkubectl" -p 8080:8080 -d --privileged kubeoperator/webku
 | :--- | :---  | :---| :---|
 | SESSION_STORAGE_SIZE | string | 10M |  单会话的存储大小限制 |
 | KUBECTL_INSECURE_SKIP_TLS_VERIFY | bool | true | kubectl命令是否跳过tls验证 |
-| GOTTY_OPTIONS | string | --port 8080 --permit-write --permit-arguments | 查看 [Gotty Options](https://github.com/KubeOperator/webkubectl/blob/master/gotty/GOTTY_USAGE.md#options) |
+| GOTTY_OPTIONS | string | --port 8080 --permit-write --permit-arguments | 查看 [Gotty Options](https://github.com/rahuldshetty/webkubectl/blob/master/gotty/GOTTY_USAGE.md#options) |
 | WELCOME_BANNER | string | Welcome to Web Kubectl, try kubectl --help. |   Web终端打开后的欢迎横幅 |
 
 # 使用
@@ -65,9 +65,9 @@ http://<webkubectl-address>:<port>
 ```
 在打开的页面中，您可以管理您自己的kubeconfig文件或bearer token凭据，这些凭据存储在您本地浏览器的Local Storage中。然后选择一个会话，单击“连接”在弹出的Web终端中使用kubectl命令。
 
-![index](https://raw.githubusercontent.com/KubeOperator/webkubectl/master/web-resources/index.jpg)
+![index](https://raw.githubusercontent.com/rahuldshetty/webkubectl/master/web-resources/index.jpg)
 
-![terminal](https://raw.githubusercontent.com/KubeOperator/webkubectl/master/web-resources/terminal.jpg)
+![terminal](https://raw.githubusercontent.com/rahuldshetty/webkubectl/master/web-resources/terminal.jpg)
 
 ## 使用 API
 #### 通过Kubernetes API Server地址和bearer token获取终端Token
@@ -123,8 +123,8 @@ http://<webkubectl-address>:<port>/terminal/?token=<API响应中的Token>
 
 # 安全 
 -  **终端Token验证**：从API响应中获取的终端Token使用一次后将立即失效，如果一直不使用，则在5分钟后过期。
--  **Authentication**：默认情况下，无需进行任何身份验证即可访问所有资源，若要限制匿名访问，可以启用gotty的基本身份验证，请参见[操作方法](https://github.com/KubeOperator/webkubectl/blob/master/gotty/GOTTY_USAGE.md#options)。
--  **SSL/TLS**：默认情况下，服务器与客户端之间的所有流量均未加密，我们建议您启用gotty的SSL / TLS选项，请参见[操作方法](https://github.com/KubeOperator/webkubectl/blob/master/gotty/GOTTY_USAGE.md#options)。或者，您可以在代理后面部署Web Kubectl并为该代理启用SSL / TLS，请注意，您的代理需要支持WebSocket协议。
+-  **Authentication**：默认情况下，无需进行任何身份验证即可访问所有资源，若要限制匿名访问，可以启用gotty的基本身份验证，请参见[操作方法](https://github.com/rahuldshetty/webkubectl/blob/master/gotty/GOTTY_USAGE.md#options)。
+-  **SSL/TLS**：默认情况下，服务器与客户端之间的所有流量均未加密，我们建议您启用gotty的SSL / TLS选项，请参见[操作方法](https://github.com/rahuldshetty/webkubectl/blob/master/gotty/GOTTY_USAGE.md#options)。或者，您可以在代理后面部署Web Kubectl并为该代理启用SSL / TLS，请注意，您的代理需要支持WebSocket协议。
 
 # 扩展
 -  [kubectl插件](https://github.com/topics/kubectl-plugins): [ahmetb/kubectx](https://github.com/ahmetb/kubectx)
@@ -133,7 +133,7 @@ http://<webkubectl-address>:<port>/terminal/?token=<API响应中的Token>
 -  [helm/helm](https://github.com/helm/helm)
 
 # 依赖 
--  [webkubectl/gotty](https://github.com/KubeOperator/webkubectl/tree/master/gotty)
+-  [webkubectl/gotty](https://github.com/rahuldshetty/webkubectl/tree/master/gotty)
 -  [ahmetb/kubectx](https://github.com/ahmetb/kubectx)
 -  [ahmetb/kubectl-aliases](https://github.com/ahmetb/kubectl-aliases)
 -  [junegunn/fzf](https://github.com/junegunn/fzf)
@@ -157,7 +157,7 @@ ___
 
 # 广告
 
-> ### [KubeOperator](https://kubeoperator.io/)
-> KubeOperator 是一个开源项目，在离线网络环境下，通过可视化 Web UI 在 VMware、Openstack 或者物理机上部署和管理生产级别的 Kubernetes 集群。<br>
-> [https://kubeoperator.io](https://kubeoperator.io)<br>
-> [https://github.com/kubeoperator/kubeoperator](https://github.com/kubeoperator/kubeoperator)
+> ### [rahuldshetty](https://rahuldshetty.io/)
+> rahuldshetty 是一个开源项目，在离线网络环境下，通过可视化 Web UI 在 VMware、Openstack 或者物理机上部署和管理生产级别的 Kubernetes 集群。<br>
+> [https://rahuldshetty.io](https://rahuldshetty.io)<br>
+> [https://github.com/rahuldshetty/rahuldshetty](https://github.com/rahuldshetty/rahuldshetty)
