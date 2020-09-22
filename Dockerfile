@@ -31,21 +31,10 @@ RUN apt-get update && \
     mkdir -p /tmp/k9s && cd /tmp/k9s && wget https://github.com/derailed/k9s/releases/download/v0.21.2/k9s_Linux_x86_64.tar.gz && tar -xvf k9s_Linux_x86_64.tar.gz && chmod +x k9s && mv k9s /usr/bin && \
     curl -L https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash && \
     chmod +x /usr/bin/gotty && chmod 500 /usr/bin/nohup && \
-    DEBIAN_FRONTEND=noninteractive apt-get --purge remove -y && \
+    DEBIAN_FRONTEND=noninteractive apt-get --purge remove -y git && \
     DEBIAN_FRONTEND=noninteractive apt-get autoremove -y && \
     DEBIAN_FRONTEND=noninteractive apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     chmod -R 755 /tmp && mkdir -p /opt/webkubectl
-
-# Installing Krew
-RUN cd "$(mktemp -d)" && \
-  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew.{tar.gz,yaml}" && \
-  tar zxvf krew.tar.gz && \
-  ./krew-linux_amd64 install krew exec-as prompt
-
-ENV KREW_PATH="/root/.krew/bin"
-RUN chmod -R 777 "${KREW_PATH}"
-RUN cp -r ${KREW_PATH} /usr/bin/
-
 
 COPY vimrc.local /etc/vim
 COPY start-webkubectl.sh /opt/webkubectl
@@ -54,7 +43,7 @@ COPY init-kubectl.sh /opt/webkubectl
 RUN chmod -R 700 /opt/webkubectl
 
 
-ENV SESSION_STORAGE_SIZE=100M
+ENV SESSION_STORAGE_SIZE=10M
 ENV WELCOME_BANNER="Welcome to Web Kubectl, try kubectl --help."
 ENV KUBECTL_INSECURE_SKIP_TLS_VERIFY=true
 ENV GOTTY_OPTIONS="--port 8080 --permit-write --permit-arguments"
