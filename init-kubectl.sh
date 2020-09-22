@@ -43,10 +43,17 @@ chown -R nobody:nogroup .kube
 
 export TMPDIR=/nonexistent
 
+default_user="nobody"
+pod_name=$(kubectl get pods |grep ${arg2} | awk '{print $1}')
+
+exec_command="kubectl exec -it -c ${arg2} ${pod_name}  -- sh -c \"exec su -s /bin/sh ${default_user}\" "
+
 # exec su -s /bin/bash nobody
 # Switch to nobody user and connect to the given pod
-if [ "${arg2}" ]; then
-    exec su -s "/bin/bash" -c "kubectl exec -it deployment/${arg2} -- bash" nobody
+if [ -z $pod_name ]; then
+    echo "Connection failed. Please try again."
+elif [ "${arg2}" ]; then
+    exec su -s "/bin/bash" -c "${exec_command}" nobody
 else
    echo "Permission Denied!"
 fi
