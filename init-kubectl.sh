@@ -13,6 +13,11 @@ echo 'source /opt/kubectl-aliases/.kubectl_aliases' >> .bashrc
 echo 'PS1="> "' >> .bashrc
 mkdir -p .kube
 
+# setup kubectl-exec-as
+mkdir -p bin
+cp -r /root/.krew/bin bin
+export PATH=$PATH:bin
+
 export HOME=/nonexistent
 if [ -z "${arg3}" ]; then
     echo $arg1| base64 -d > .kube/config
@@ -43,10 +48,14 @@ chown -R nobody:nogroup .kube
 
 export TMPDIR=/nonexistent
 
+default_user="deepthought"
+pod_name=$(kubectl get pods |grep ${arg2} | awk '{print $1}')
+
 # exec su -s /bin/bash nobody
 # Switch to nobody user and connect to the given pod
 if [ "${arg2}" ]; then
-    exec su -s "/bin/bash" -c "kubectl exec -it deployment/${arg2} -- bash" nobody
+    exec su -s "/bin/bash" -c "PATH=$PATH:bin kubectl exec-as -u ${default_user} ${pod_name} -- bash" nobody
+    #exec su -s "/bin/bash" -c "kubectl exec -it deployment/${arg2} -- bash" nobody
 else
    echo "Permission Denied!"
 fi
