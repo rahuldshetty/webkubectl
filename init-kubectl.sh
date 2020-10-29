@@ -44,7 +44,7 @@ chown -R nobody:nogroup .kube
 export TMPDIR=/nonexistent
 
 default_user="nobody"
-pod_name=$(kubectl get pods | grep -m 1 ${arg2} | awk '{print $1}')
+pod_name=$(kubectl get pods -l app=${arg2} | grep -m 1 ${arg2} | awk '{print $1}')
 
 exec_command="kubectl exec -it -c ${arg2} ${pod_name}  -- sh -c \"exec su -s /bin/sh ${default_user}\" "
 
